@@ -104,7 +104,7 @@ When reviewing a suspicious script:
 
 | Symbol | Description | Example |
 |--------|-------------|---------|
-| '|' (pipe) | Send output from one command to the next | `cat list.txt | sort | uniq` |
+| '||' (pipe) | Send output from one command to the next | `cat list.txt | sort | uniq` |
 | `>` / `>>` | `>` overwrites a file; `>>` appends to a file | `cmd > output.txt` |
 | `&&` | Run the next command only if the first succeeds | `grep "secret" notes.txt && echo "Found!"` |
 
