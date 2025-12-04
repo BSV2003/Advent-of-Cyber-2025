@@ -205,11 +205,15 @@ The **"Press <return> to continue"** prompt simply means pressing the **Enter** 
 Next, open the terminal where your `server.py` script is running to monitor whether the target interacts with the phishing page and enters their credentials.  
 > ⏳ **Note:** It may take 1–2 minutes before any captured credentials appear in the terminal. Continue observing the output.
 
+---
+
 # ⚠️ Real-World Impact
 To the TBFC red team’s surprise, at least one set of valid credentials was received.  
 This is alarming, as it confirms that an adversary could execute the same attack with real consequences — and may *already* have done so. If an attacker gains access using stolen credentials, they can severely disrupt the gift delivery systems.
 
 It is crucial to verify whether such unauthorized access has occurred and take appropriate defensive actions immediately.
+
+---
 
 # ✔️ Summary
 
