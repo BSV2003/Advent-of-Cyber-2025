@@ -1,4 +1,5 @@
 # Linux CLI - Shells Bells
+Explore the Linux command-line interface and use it to unveil Christmas mysteries.
 
 ## Learning Objectives
 - Understand the basics of the Linux command-line interface (CLI)
