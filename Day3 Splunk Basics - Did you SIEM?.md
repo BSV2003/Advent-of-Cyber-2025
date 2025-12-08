@@ -213,7 +213,7 @@ We can also use the sum function to calculate the sum of the bytes transferred, 
 
 **Search Query:** sourcetype=firewall_logs src_ip="10.10.1.5" AND dest_ip="<REDACTED>" AND action="ALLOWED" | stats sum(bytes_transferred) by src_ip
 
-The results show a hugh volume of data transferred from the compromised webserver to C2 server.
+The results show a huge volume of data transferred from the compromised webserver to C2 server.
 
 <img width="941" height="215" alt="image" src="https://github.com/user-attachments/assets/10fb958e-6fe8-4901-9d68-3ec12caba66e" />
 
