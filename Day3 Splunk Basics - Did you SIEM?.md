@@ -249,6 +249,6 @@ The results show a huge volume of data transferred from the compromised webserve
 <img width="734" height="404" alt="image" src="https://github.com/user-attachments/assets/fb925225-e864-4a4a-8aab-6e6feac8fa95" />
 
 **Examine the firewall logs. How many bytes were transferred to the C2 server IP from the compromised web server?**
-`12617`
+`126167`
 <img width="941" height="212" alt="image" src="https://github.com/user-attachments/assets/85bf062c-1fc9-41c1-a426-b165dbaf73a1" />
 
