@@ -149,3 +149,106 @@ Search for common path traversal and open redirect vulnerabilities.
 
 The output shows the resources the attacker is trying to access. Let's update the search query to get the count of the resources requested by the attacker. This search query is filtering on the paths that contain either ../../ or the term redirect in it, as shown below. This is done to look for footprints of path traversal attempts (../../). To, we need to update in the search query to escape the characters like ..\/..\/.
 
+**Search query:** sourcetype=web_traffic client_ip="<REDACTED>" AND path="*..\/..\/*" OR path="*redirect*" | stats count by path
+
+Results reveal attempts to read system files (../../*), showing the attacker moved beyond simple scanning to active vulnerability testing.
+
+<img width="943" height="239" alt="image" src="https://github.com/user-attachments/assets/35c8dc6a-6515-4bc4-a9a9-b1783e1d8e58" />
+
+## SQL Injection Attack
+
+Find the automated attack tool and its payload by using the query below:
+
+**Search query:** sourcetype=web_traffic client_ip="<REDACTED>" AND user_agent IN ("*sqlmap*", "*Havij*") | table _time, path, status
+
+The results confirms the use of known SQL injection and specific attack strings like SLEEP(5). A 504 status code often confirms a successful time-based SQL injection attack.
+
+<img width="946" height="403" alt="image" src="https://github.com/user-attachments/assets/1289f831-6fef-45f4-81ee-2c717d3bb342" />
+
+---
+
+# Exfiltration Attempts
+
+Search for attempts to download large, sensitive files (backups, logs). We can use the query below:
+
+**Search query:** sourcetype=web_traffic client_ip="<REDACTED>" AND path IN ("*backup.zip*", "*logs.tar.gz*") | table _time path, user_agent
+
+The results indicate the attacker was exfiltrating large chunks of compressed log files using tools like curl, zgrab, and more. We can confirm the details about these connections in the firewall logs.
+
+<img width="941" height="419" alt="image" src="https://github.com/user-attachments/assets/7a6c117f-afa1-4e4b-af50-44234f6a3c03" />
+
+---
+
+# Ransomware Staging & RCE (Remote Code Execution)
+
+Remote Code Execution (RCE) is a vulnerability that allows an attacker to run arbitrary code on a remote system. If exploited successfully, it often leads to full system compromise.
+
+Requests for sensitive archives like /logs.tar.gz and /config indicate the attacker is gathering data for double-extortion. In the logs, we identified some requests related to bunnylock and shell.php. Let's use the following query to see what those search queries are about.
+
+**Search query:** sourcetype=web_traffic client_ip="<REDACTED>" AND path IN ("*bunnylock.bin*", "*shell.php?cmd=*") | table _time, path, user_agent, status
+
+The results clearly confirm a successful webshell. The attacker has gained full control over the web server and is also able to run commands. This type of attack is called Remote code Execution (RCE). The execution of /shell.php?cmd=./bunnylock.bin indicates a ransomware like program executed on the server. 
+
+<img width="941" height="412" alt="image" src="https://github.com/user-attachments/assets/2961bf83-f4c8-49bf-a4ae-8396e8d86344" />
+
+---
+
+# Correlate Outbound C2 Communication
+
+Command and Control (C2) Infrastructure are a set of programs used to communicate with a victim machine. This is comparable to a reverse shell, but is generally more advanced and often communicate via common network protocols, like HTTP, HTTPS and DNS.
+
+We pivot the search to the firewall_logs using the Compromised Server IP (10.10.1.5) as the source and the attacker IP as the destination.
+
+**Search query:** sourcetype=firewall_logs src_ip="10.10.1.5" AND dest_ip="<REDACTED>" AND action="ALLOWED" | table _time, action, protocol, src_ip, dest_ip, dest_port, reason
+
+This query proves the server immediately established an outbound connection to the attacker's C2 IP on the suspicious DEST_PORT. The ACTION=ALLOWED and REASON=C2_CONTACT fields confirm the malware communication channel was active.
+
+<img width="942" height="415" alt="image" src="https://github.com/user-attachments/assets/c72966ae-13d6-4711-be50-11b702e1593d" />
+
+---
+
+# Volume of Data Exfiltrated
+
+We can also use the sum function to calculate the sum of the bytes transferred, using the bytes_transferred field, as shown below:
+
+**Search Query:** sourcetype=firewall_logs src_ip="10.10.1.5" AND dest_ip="<REDACTED>" AND action="ALLOWED" | stats sum(bytes_transferred) by src_ip
+
+The results show a hugh volume of data transferred from the compromised webserver to C2 server.
+
+<img width="941" height="215" alt="image" src="https://github.com/user-attachments/assets/10fb958e-6fe8-4901-9d68-3ec12caba66e" />
+
+---
+
+# Conclusion
+
+- **Identity found:** The attacker was identified via the highest volume of malicious web traffic originating from the external IP.
+- **Intrusion vector:** The attack followed a clear progression in the web logs (sourcetype=web_traffic).
+- **Reconnaissance:** Probes were initiated via cURL/Wget, looking for configuration files (/.env) and testing path traversal vulnerabilities.
+- **Exploitation:** The use of SQLmap user agents and specific payloads (SLEEP(5)) confirmed the successful exploitation phase.
+- **Payload delivery:** The Action on Objective was established by the final successful execution of the command cmd=./bunnylock.bin via the webshell.
+- **C2 confirmation:** The pivot to the firewall logs (sourcetype=firewall_logs) proved the post-exploitation activity. The internal, compromised server (SRC_IP: 10.10.1.5) established an outbound C2 connection to the attacker's IP.
+
+---
+
+# Answer the questions below
+
+**What is the attacker IP found attacking and compromising the web server?**
+`198.51.100.55`
+<img width="730" height="392" alt="image" src="https://github.com/user-attachments/assets/30887ce6-961c-49fc-a729-c618c22d879d" />
+
+**Which day was the peak traffic in the logs? (Format: YYYY-MM-DD)**
+`2025-10-12`
+<img width="929" height="176" alt="image" src="https://github.com/user-attachments/assets/dd35eefc-c273-4613-ada8-25c6397e35bd" />
+
+**What is the count of Havij user_agent events found in the logs?**
+`993`
+<img width="737" height="415" alt="image" src="https://github.com/user-attachments/assets/02153723-f117-40c3-88b1-96ca29404ae0" />
+
+**How many path traversal attempts to access sensitive files on the server were observed?**
+`658`
+<img width="734" height="404" alt="image" src="https://github.com/user-attachments/assets/fb925225-e864-4a4a-8aab-6e6feac8fa95" />
+
+**Examine the firewall logs. How many bytes were transferred to the C2 server IP from the compromised web server?**
+`12617`
+<img width="941" height="212" alt="image" src="https://github.com/user-attachments/assets/85bf062c-1fc9-41c1-a426-b165dbaf73a1" />
+
