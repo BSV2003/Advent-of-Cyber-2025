@@ -60,4 +60,92 @@ Let's chart the total event count over time, grouped by day, to determine the nu
 
 **Search query:** index=main sourcetype=web_traffic | timechart span=1d count
 
+<img width="947" height="401" alt="image" src="https://github.com/user-attachments/assets/ede5a086-2dd7-4a58-a0ab-79033269c9dc" />
+
+The above results are now showing the event logs captured per day. This could be interesting, as we can see some days getting a high volume of logs. We can also click on the Visualization tab to examine the graph for better representation, as shown below:
+
+<img width="945" height="401" alt="image" src="https://github.com/user-attachments/assets/d4ac15cb-73d9-4dd1-9a99-380f5d15174b" />
+
+We can append the reverse function at the end to display the result in descending order, showing the day with the maximum number of events at the beginning. 
+
+**Search query:** index=main sourcetype=web_traffic | timechart span=1d count | sort by count | reverse
+
+<img width="944" height="410" alt="image" src="https://github.com/user-attachments/assets/90de2a81-b719-4846-9a9d-4d0ece622915" />
+
+---
+
+# Anomaly Detection
+
+Now that we have examined the days with the abnormal logs, using the table and the graph, let's use the same search query to examine various fields to hunt for suspicious values. We need to go back to the Events tab to continue.
+
+## User Agent
+
+Let's click on the user_agent field in the left panel, as shown below. It will show us the details about the user agents captured so far. 
+
+<img width="738" height="416" alt="image" src="https://github.com/user-attachments/assets/8a648253-9d58-4505-a166-31961b8a000f" />
+
+Upon closer examination, it becomes clear that, apart from legitimate user agents like Mozilla's variants, we are receiving a large number of suspicious ones, which we will need to investigate further.
+
+## client_ip
+
+The second field we will examine is the client_ip, which contains the IP addresses of the clients accessing the web server. We can immediately see one particular IP address standing out, which we will investigate further.
+
+<img width="735" height="413" alt="image" src="https://github.com/user-attachments/assets/7d54a1b5-8d89-4ca5-90fd-e0a80566f0f1" />
+
+## path
+
+The third field we will examine is path, which contains the URI being requested and accessed by the client IPs. The results shown below clearly indicate some attacks worth investigating.
+
+<img width="735" height="413" alt="image" src="https://github.com/user-attachments/assets/22f8bc8c-a977-4c86-b1cb-1ca6cad968e5" />
+
+---
+
+# Filtering out Benign Values
+We know King Malhare's bunnies use scripts and tools, not standard browsers. Let's filter out all standard traffic.
+
+Let's exclude common legitimate user agents. The following query will remove legitimate user agents from the results and only show the suspicious ones, which we will further investigate.
+
+**Search query:** index=main sourcetype=web_traffic user_agent!=*Mozilla* user_agent!=*Chrome* user_agent!=*Safari* user_agent!=*Firefox*
+
+The output reveals interesting results. By clicking on the client_ip field we can see a single IP address being responsible for all the suspicious user agents. Let's note that down for further investigation and fill in the <REDACTED> portions of the upcoming queries with that IP.
+
+<img width="731" height="212" alt="image" src="https://github.com/user-attachments/assets/c3a5f95f-b5f2-4386-9a8c-067ff43568f3" />
+
+---
+
+# Narrowing Down Suspicious IPs
+
+In real-world scenarios, we often encounter various IP addresses constantly attempting to attack our servers. To narrow down on the IP addresses that do not send requests from common desktop or mobile browsers, we can use the following query:
+
+**Search query:** sourcetype=web_traffic user_agent!=*Mozilla* user_agent!=*Chrome* user_agent!=*Safari* user_agent!=*Firefox* | stats count by client_ip | sort -count | head 5
+
+The result confirms the top IP used by the Bandit Bunnies. In the search query, the - in the sort -count part will sort the result by count in reverse order, it's the same as using the reverse function. Let's pick this IP address and filter out to see what the footprints of the activities captured.
+
+<img width="941" height="251" alt="image" src="https://github.com/user-attachments/assets/469b3f37-5a1e-42fa-a1fb-b3c6f8ed6404" />
+
+---
+
+# Tracing the Attack Chain
+
+We will now focus on the selected attacker IP to trace their steps chronologically, confirming the use of multiple tools and payloads. Don’t forget to replace <REDACTED> with the IP we noted down previously.
+
+## Reconnaissance (Footprinting)
+
+We will start searching for the initial probing of exposed configuration files using the query below:
+
+**Search query:** sourcetype=web_traffic client_ip="<REDACTED>" AND path IN ("/.env", "/*phpinfo*", "/.git*") | table _time, path, user_agent, status
+
+The result confirms the attacker used low-level tools (curl, wget) and was met with 404/403/401 status codes.
+
+<img width="938" height="317" alt="image" src="https://github.com/user-attachments/assets/6210ecf5-a72a-4164-b78b-f8a1d2f48eca" />
+
+## Enumeration (Vulnerability Testing)
+
+Search for common path traversal and open redirect vulnerabilities.
+
+**Search query:** sourcetype=web_traffic client_ip="<REDACTED>" AND path="*..*" OR path="*redirect*"
+
+<img width="932" height="413" alt="image" src="https://github.com/user-attachments/assets/7f55010b-3dd8-4364-a138-4e6fd942d309" />
+
+The output shows the resources the attacker is trying to access. Let's update the search query to get the count of the resources requested by the attacker. This search query is filtering on the paths that contain either ../../ or the term redirect in it, as shown below. This is done to look for footprints of path traversal attempts (../../). To, we need to update in the search query to escape the characters like ..\/..\/.
 
