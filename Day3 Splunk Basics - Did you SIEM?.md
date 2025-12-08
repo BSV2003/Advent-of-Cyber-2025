@@ -30,8 +30,8 @@ After running the query, we will be presented with two separate datasets that ha
 <img width="733" height="252" alt="image" src="https://github.com/user-attachments/assets/c319478d-6d82-4dcb-bf00-64698d65c9e2" />
 
 The two datasets are as follows:
-- web_traffic: This data source contains events related to web connections to and from the web server.
-- firewall_logs: This data source contains the firewall logs, showing the traffic allowed or blocked. The local IP assigned to the web server is 10.10.1.15.
+- **web_traffic:** This data source contains events related to web connections to and from the web server.
+- **firewall_logs:** This data source contains the firewall logs, showing the traffic allowed or blocked. The local IP assigned to the web server is 10.10.1.15.
 Let's explore the logs and investigate the attack on our servers to identify the culprit.
 
 ---
