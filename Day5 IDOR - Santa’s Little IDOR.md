@@ -90,9 +90,11 @@ Finally, record and monitor failed access attempts; they can be early signs of s
 
 `Insecure Direct Object Reference`
 
+
 **What type of privilege escalation are most IDOR cases?**
 
 `Horizontal`
+
 
 **Exploiting the IDOR found in the view_accounts parameter, what is the user_id of the parent that has 10 children?**
 
