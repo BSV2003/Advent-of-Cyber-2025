@@ -31,6 +31,7 @@ Even worse is when a feature like this doesn't require a user to authenticate, t
 The full term, Insecure Direct Object Reference, sounds fancy, but it doesn’t really describe what’s going wrong. The “Direct Object Reference” part just means that a system uses an ID (like /user/1) to point to something. That’s not the problem. The real issue is that the system doesn’t check whether the person making the request is allowed to access it.
 
 A lot of people try to “fix” IDORs by hiding or encoding IDs. For example, changing /user/1 to /user/ea21f09b2. That might make it look harder to guess, but if the server still isn’t checking permissions, it’s just as insecure. The vulnerability isn’t about how the object is referenced, it’s about missing authorization checks.
+
 The real issue is **missing authorization checks on the server**.
 
 That’s why we can call it an Authorization Bypass instead. It explains exactly what’s happening: someone is bypassing the rules that decide who can see or change something. Whether the ID is a number, a hash, or a random string, the risk stays the same if the server doesn’t verify access.
