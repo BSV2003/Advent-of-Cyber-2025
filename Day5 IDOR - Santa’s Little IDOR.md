@@ -11,7 +11,7 @@ Insecure direct object references (IDOR) are a type of access control vulnerabil
 
 ---
 
-## It’s Dangerously Obvious, Really
+## Why IDOR Is So Easy to Miss
 
 Have you ever seen a link that looks like this:
 
@@ -31,6 +31,7 @@ Even worse is when a feature like this doesn't require a user to authenticate, t
 The full term, Insecure Direct Object Reference, sounds fancy, but it doesn’t really describe what’s going wrong. The “Direct Object Reference” part just means that a system uses an ID (like /user/1) to point to something. That’s not the problem. The real issue is that the system doesn’t check whether the person making the request is allowed to access it.
 
 A lot of people try to “fix” IDORs by hiding or encoding IDs. For example, changing /user/1 to /user/ea21f09b2. That might make it look harder to guess, but if the server still isn’t checking permissions, it’s just as insecure. The vulnerability isn’t about how the object is referenced, it’s about missing authorization checks.
+The real issue is **missing authorization checks on the server**.
 
 That’s why we can call it an Authorization Bypass instead. It explains exactly what’s happening: someone is bypassing the rules that decide who can see or change something. Whether the ID is a number, a hash, or a random string, the risk stays the same if the server doesn’t verify access.
 
@@ -53,7 +54,7 @@ Authorization cannot happen before authentication. If the application doesn't kn
 - **Vertical privilege escalation:** This refers to privilege escalation where you gain access to more features. For example, you may be a normal user on the application, but can perform actions that should be restricted for an administrator.
 - **Horizontal privilege escalation:** This refers to privilege escalation where you use a feature you are authorized to use, but gain access to data that you are not allowed to access. For example, you should only be able to see your accounts, not someone else's accounts.
 
-IDOR is usually a form of _horizontal privilege escalation_. You are allowed to make use of the track package functionality. But you should be restricted to only performing that tracking action for packages you own.
+IDOR is usually a form of **horizontal privilege escalation**. You are allowed to make use of the track package functionality. But you should be restricted to only performing that tracking action for packages you own.
 
 ---
 
@@ -74,6 +75,11 @@ Don't rely on tricks like Base64 or hashing the IDs; those can still be guessed 
 Use random or hard-to-guess IDs for public links, but remember that random IDs alone don't make your app safe. Always test your app by trying to open another user's data and making sure it's blocked.
 
 Finally, record and monitor failed access attempts; they can be early signs of someone trying to exploit an IDOR.
+
+---
+
+> 🔐 **Key Takeaway:**  
+> IDOR vulnerabilities occur when applications trust user-controlled identifiers without verifying ownership or permissions on the server.
 
 ---
 
