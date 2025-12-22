@@ -50,3 +50,46 @@ In simple terms, agentic AI doesn’t just answer — it thinks, acts, and adjus
 
 # ReAct Prompting & Context-Awareness
 
+Agentic AI can do complex tasks because it uses a reasoning method called Chain-of-Thought (CoT).
+
+Chain-of-Thought (CoT) means the AI thinks step by step instead of jumping straight to an answer. This helps it solve problems that need logic, math, or careful reasoning.
+
+However, CoT has a limitation:
+- It works only inside the AI’s own knowledge.
+- It cannot check facts in real time.
+- It can make mistakes, repeat errors, or invent information (hallucinate).
+
+> ReAct: Reason + Act
+
+ReAct improves on Chain-of-Thought by allowing the AI to both think and act.
+
+Instead of just reasoning internally, a ReAct-based AI:
+- Thinks about what to do
+- Takes an action (like searching the web, calling an API, or running code)
+- Observes the result
+- Updates its plan based on what it learned
+
+This happens in a loop, similar to how humans work.
+
+## How ReAct Works
+
+A ReAct-enabled AI alternates between:
+- **Reasoning:** Explaining its current thinking
+- **Action:** Performing a real-world operation (searching, querying data, executing tools)
+
+## Why ReAct Is Important
+
+ReAct allows the AI to:
+- Adjust its plan when something fails
+- Use up-to-date or external information
+- Reduce fake or incorrect answers
+- Combine thinking and doing in a smarter way
+
+In simple terms, ReAct helps AI behave more like a human:
+> Think → Act → Observe → Improve → Repeat
+
+---
+
+# Tool Use/User Space
+
+
