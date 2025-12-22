@@ -92,4 +92,33 @@ In simple terms, ReAct helps AI behave more like a human:
 
 # Tool Use/User Space
 
+Modern AI models can use tools to do things they cannot do on their own, like searching the web, calling APIs, or working with files. This feature is often called function calling.
+
+## How Tool Use Works
+
+**1. Developers define tools**
+- Tools are described to the AI using a structured format (like JSON).
+- Each tool has:
+-- A name
+-- A description
+-- A list of inputs it accepts
+
+This teaches the AI what tools exist and how to use them.
+
+**2. The AI decides when to use a tool**
+- If a user asks something that needs real-time or external data (e.g., recent news),
+- The AI understands it should **use a tool instead of guessing.**
+
+**3. The AI calls the tool**
+- The AI sends a structured request to the tool with the required input.
+- **Example:** searching the web for recent information.
+
+**4. The external system responds**
+- The tool (like Google or Bing search) runs outside the AI.
+- It returns real-world results.
+
+**5. The AI uses the results**
+- The AI reads the tool’s output.
+- It combines this information with its reasoning.
+- Then it gives the user a clear, natural-language answer.
 
