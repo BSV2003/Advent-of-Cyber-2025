@@ -222,3 +222,18 @@ When cracking activity is detected:
 - Educate users
 - Restrict cracking tools to approved sandboxes
 
+---
+
+## Commands Used
+
+To crack password of the encrypted PDF file: 
+> `pdfcrack -f flag.pdf -w /usr/share/wordlists/rockyou.txt`
+
+<img width="941" height="313" alt="image" src="https://github.com/user-attachments/assets/93dd85bd-001b-4c8b-ad4a-ab65fca5518b" />
+
+To crack password of the encrypted ZIP file: 
+This is a 2-stage process.
+> `zip2john flag.zip > ziphash.txt`
+But John alone cannot crack zip file. So we use zip2john.
+> `john --wordlist =/usr/share/wordlists/rockyou.txt ziphash.txt`
+
