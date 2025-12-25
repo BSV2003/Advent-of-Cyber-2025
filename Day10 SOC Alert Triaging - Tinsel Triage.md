@@ -18,6 +18,8 @@ Alert triaging is the process of **quickly reviewing and prioritising security a
 When alerts flood in, treating every alert equally wastes time and resources.  
 Triaging helps SOC analysts focus on **what truly matters**.
 
+> Alert triage is the critical process in cybersecurity (and IT) of evaluating, classifying, prioritizing, and routing security alerts to quickly separate real threats from noise, deciding which to investigate immediately (true positives) versus dismissing (false positives), much like ER doctors sort patients by urgency to focus on the most dangerous cases first. It ensures security teams efficiently use resources, focusing on high-risk incidents to minimize impact.
+
 ---
 
 ## Why Alert Triaging Is Important
