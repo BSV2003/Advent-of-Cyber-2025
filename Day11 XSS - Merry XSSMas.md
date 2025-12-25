@@ -208,3 +208,11 @@ And the alert shows up **every time the page loads**, it means:
 - Stored XSS = input is saved and executes for everyone
 
 Both happen because the application trusts user input too much and fails to sanitize or encode it properly.
+
+---
+
+# Answer the questions below
+
+**Which type of XSS attack requires payloads to be persisted on the backend?**
+`Stored`
+
