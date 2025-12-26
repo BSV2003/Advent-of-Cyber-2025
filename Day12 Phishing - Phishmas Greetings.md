@@ -22,7 +22,7 @@ Common intentions behind phishing messages:
 - **Data exfiltration:** Gathering sensitive company or personal information.
 - **Financial fraud:** Persuading victims to transfer money or approve fake invoices.
 
-$ free domain (gmail.com)
+> free domain (gmail.com)
 
 Even though systems are well protected, phishing still works because it tricks people. Technology can be secured — humans can still make mistakes.
 
