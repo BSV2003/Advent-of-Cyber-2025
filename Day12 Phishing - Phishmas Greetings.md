@@ -221,6 +221,8 @@ By switching platforms, attackers:
 
 This technique is often used after the first phishing message succeeds.
 
+---
+
 Attackers don’t rely on just one trick.  
 They combine:
 - Trusted platforms
