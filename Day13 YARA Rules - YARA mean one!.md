@@ -110,4 +110,165 @@ Together, these components allow defenders to precisely detect malware and suspi
 
 # Strings
 
+Strings are the indicators (clues) that YARA searches for when scanning files, memory, or other data sources.
+They represent fragments of text, bytes, or patterns that can reveal malicious activity.
 
+YARA supports three main types of strings:
+1. Text strings
+2. Hexadecimal strings
+3. Regular expression (regex) strings
+
+## Text Strings
+
+Text strings are the most common and simplest type of YARA strings.
+They match words or short text fragments found in files, scripts, or memory.
+
+By default:
+- ASCII
+- Case-sensitive
+
+**Example: Simple Text String Rule**
+rule TBFC_KingMalhare_Trace
+{
+    strings:
+        $TBFC_string = "Christmas"
+
+    condition:
+        $TBFC_string 
+}
+
+### Text String Modifiers
+
+Attackers often try to hide strings using encoding or obfuscation.
+YARA provides **modifiers** to counter this.
+
+- **Case-Insensitive (`nocase`)**
+Matches text regardless of letter casing.
+``` yara
+strings:
+    $xmas = "Christmas" nocase
+```
+
+- **Unicode / Wide Characters (`wide`, `ascii`)**
+Useful for Windows binaries using Unicode (2-byte characters).
+```yara
+strings:
+    $xmas = "Christmas" wide ascii
+```
+
+- **XOR-Encoded Strings (`xor`)**
+Automatically tests all single-byte XOR variations.
+```yara
+strings:
+    $hidden = "Malhare" xor
+```
+
+- Base64-Encoded Strings (`base64`, `base64wide`)
+Detects strings hidden using Base64 encoding.
+```yara
+strings:
+    $b64 = "SOC-mas" base64
+```
+
+These modifiers make rules more resilient against obfuscation.
+
+## Hexadecimal Strings
+
+Hex strings match raw byte patterns, useful when malware doesn’t contain readable text.
+
+Common use cases:
+- File headers
+- Shellcode
+- Binary signatures
+
+**Example: Hex String Rule**
+```yara
+rule TBFC_Malhare_HexDetect
+{
+    strings:
+        $mz = { 4D 5A 90 00 }   // MZ header of a Windows executable
+        $hex_string = { E3 41 ?? C8 G? VB }
+
+    condition:
+        $mz and $hex_string
+}
+```
+
+## Regular Expression (Regex) Strings
+
+Regex strings match patterns, not exact values.
+They are useful when malware changes URLs, filenames, or commands slightly.
+
+**Example: Regex Rule**
+```yara
+rule TBFC_Malhare_RegexDetect
+{
+    strings:
+        $url = /http:\/\/.*malhare.*/ nocase
+        $cmd = /powershell.*-enc\s+[A-Za-z0-9+/=]+/ nocase
+
+    condition:
+        $url and $cmd
+}
+```
+
+⚠️ Regex is powerful but should be used carefully, as overly broad patterns can slow scans.
+
+---
+
+# Conditions
+
+The **condition** section defines **when a rule triggers**.
+It combines strings and logic into a final decision.
+
+## Match a Single String
+This is the simplest condition.  
+The rule triggers if **one specific string** is found in the scanned file or memory.
+```yara
+condition:
+    $xmas
+```
+Triggers if $xmas is found.
+
+## Match Any String
+When multiple strings are defined, the rule can be configured to trigger as soon as **any one** of them is found.  
+This approach is useful for detecting early signs of compromise, where even a single indicator may be suspicious.
+```yara
+condition:
+    any of them
+```
+Triggers if **at least one** string matches.
+
+## Match All Strings
+To make the rule stricter, you can require that **all defined strings** appear together.
+This reduces false positives, as YARA will only flag a file when every indicator is present.
+```yara
+condition:
+    all of them
+```
+Triggers **only if every string matches**.
+
+## Logical Operators (`and`, `or`, `not`)
+Logical operators let you combine multiple checks into a single condition.
+```yara
+condition:
+    ($s1 or $s2) and not $benign
+```
+This condition triggers when either $s1 or $s2 is found, but excludes matches that contain a known benign pattern ($benign).
+This helps reduce false positives while still catching suspicious activity.
+
+## File Property Checks
+YARA can also check file properties, not just file contents.
+This allows rules to evaluate attributes such as file size, entry point, or hashes.
+```yara
+condition:
+    any of them and (filesize < 700KB)
+```
+This is useful for detecting lightweight loaders or droppers, which are often small in size.
+
+---
+
+# Useful YARA Command Flags
+
+- **-r** → Recursively scans directories and follows symlinks
+- **-s** → Displays the strings that matched inside detected files
