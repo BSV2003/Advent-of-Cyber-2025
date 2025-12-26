@@ -51,13 +51,18 @@ In the above screenshot, it's a sample marketing email offering logistics soluti
 You need to be careful when analysing each message. Look for the intention behind it. Not every unwanted email is a threat; sometimes it’s just spam that poses no real risk.
 
 Attackers use some common techniques in almost every phishing attempt. In a phishing attack, at least one of the following techniques is present:
-- **Impersonation:** Some attackers may act as a person, department, or even a service to lure users. This is a way to gain credibility by impersonating the recipient manager or an important person within the company.
+
+## **Impersonation**
+
+Some attackers may act as a person, department, or even a service to lure users. This is a way to gain credibility by impersonating the recipient manager or an important person within the company.
 
 <img width="1483" height="641" alt="image" src="https://github.com/user-attachments/assets/e70f92cf-c5e2-4624-8e79-71a0cdc33e59" />
 
 We can easily spot impersonation attempts by looking to see if the sender's email matches the internal domain or the standard email structure of the company. In this case, the sender's domain is a free domain from Gmail, which is not aligned with TBFC's domain.
 
-- **Social Engineering:** Social engineering in phishing is the art of manipulating people rather than breaking technology. Attackers craft believable stories, emails, calls, or chat messages that exploit emotions (fear, helpfulness, curiosity, urgency) and real-world context to lure the recipients of a message.
+## **Social Engineering**
+
+Social engineering in phishing is the art of manipulating people rather than breaking technology. Attackers craft believable stories, emails, calls, or chat messages that exploit emotions (fear, helpfulness, curiosity, urgency) and real-world context to lure the recipients of a message.
 
 We can spot multiple social engineering techniques from the previous mail:
 - **Impersonation:** Is a type of Social Engineering. The attacker is pretending to be McSkidy!
@@ -67,7 +72,92 @@ We can spot multiple social engineering techniques from the previous mail:
 
 <img width="1482" height="641" alt="image" src="https://github.com/user-attachments/assets/7ef5bcd1-5972-4d0a-80cd-de98b594335b" />
 
-- **Typosquatting and Punycode:** 
+## **Typosquatting and Punycode**
 
+Checking the sender’s domain is a good way to spot fake emails.
+But attackers know people don’t always look closely — so they use tricks like typosquatting and punycode.
+
+**Typosquatting**
+
+Typosquatting happens when attackers register domains that look almost like real ones, hoping users won’t notice small mistakes.
+
+**Example:**
+- `github.com` → `glthub.com` (letter **l** instead of **i**)
+
+If a user doesn’t look carefully, they may trust the fake domain and fall for the attack.
+
+**Punycode**
+
+Punycode allows Unicode characters (used in languages like Cyrillic or Greek) to appear as normal Latin letters.
+
+Attackers exploit this by replacing letters with **look-alike characters**.
+
+**Example:**
+- Normal `tryhackme.com`
+- Fake `тrуhackme.com` (Cyrillic letters instead of Latin)
+
+To users, both look identical, but the second one is malicious.
+
+### Why This Is Dangerous
+Both typosquatting and punycode:
+- Create fake domains that look legitimate
+- Trick users into clicking malicious links
+- Make phishing emails appear to come from trusted companies
+
+### How to Spot Punycode
+- Check the **Return-Path** in email headers
+- Look for `xn--` prefixes or encoded characters
+- Mismatch between display name and real domain is a red flag
+
+Attackers don’t always need malware or exploits — sometimes they just rely on:
+- Tiny spelling mistakes
+- Look-alike characters
+- User inattention
+
+## **Spoofing**
+
+Email spoofing is another way attackers can trick users into thinking they are receiving emails from a legitimate domain.
+The message looks like it came from a trusted sender (the display name and “From:” you see in the preview), but the underlying headers tell a different story.
+
+Although the email appears to come from a legitimate domain, the real truth is revealed by inspecting the email headers.
+
+The most important fields to check are:
+- **Authentication-Results**  
+- **Return-Path**
+
+These headers show whether the email actually passed authentication checks and where it truly originated from, helping identify spoofed or malicious emails.
+
+On _Authentication-Results_, SPF, DKIM, and DMARC are security checks that help confirm if an email really comes from who it says it does:
+- **SPF (Sender Policy Framework):** Specifies which mail servers are authorised to send emails on behalf of a domain. If SPF fails, the sending server is not permitted by the domain owner.
+- **DKIM (DomainKeys Identified Mail):** Uses a cryptographic signature to ensure the email was not altered and genuinely originated from the stated domain.
+- **DMARC (Domain-based Message Authentication, Reporting & Conformance):** Combines SPF and DKIM results to decide how unauthenticated emails should be handled (deliver, quarantine, or reject).
+
+If **SPF and DMARC fail**, it is a strong indicator that the email is **spoofed**—the sender is impersonating a trusted domain.  
+In this case, **all authentication checks failed**, confirming the message is not legitimate.
+
+The **Return-Path** header reveals the actual email address used to send the message.
+**Example:** _Return-Path:_ zxwsedr@easterbb.com
+
+This address does **not** belong to the TBFC domain.  
+It confirms that the email was **spoofed** and originated from an external attacker-controlled domain.
+
+<img width="1433" height="418" alt="image" src="https://github.com/user-attachments/assets/afa36f9b-b717-4294-85e7-fb63ab26cc4e" />
+
+## **Malicious Attachments**
+
+The most classic way of phishing is attaching malicious files to an email. Usually, these attachments are sent using some sort of social engineering technique in the body.
+
+In the previous email that we analysed, the body tried to trick users into thinking that the attachment was a voice message from McSkidy.
+Instead, the file is an .html file:
+
+<img width="1465" height="194" alt="image" src="https://github.com/user-attachments/assets/b955bd7f-5079-4ba0-8203-e1d527f20e6e" />
+
+Malicious attachments are files that cause harm when opened. They can install malware, steal login details, or let attackers access a computer.
+
+HTA and HTML files are often used in phishing because they run outside the browser’s safety limits. This allows the scripts inside them to fully interact with the system, making these attachments very risky.
+
+---
+
+# Trending Phishing
 
 
