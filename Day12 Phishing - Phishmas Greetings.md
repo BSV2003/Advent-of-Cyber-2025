@@ -160,4 +160,72 @@ HTA and HTML files are often used in phishing because they run outside the brows
 
 # Trending Phishing
 
+Since email platforms and security tools got much better at blocking suspicious messages and attachments, the Malhare's Eggsploit Bunnies and other attackers had to change their game:
 
+Instead of sending malware files (which are easily caught), they now focus on tricking users into leaving the company’s secure environment.
+They often use legitimate tools or websites to make their lures look trustworthy and get users to hand over their credentials or download malicious files themselves.
+In short, most phishing attacks aren’t about dropping malware directly; they’re focusing on stealing access.
+
+## Legitimate Applications
+
+Attackers often hide behind trusted services like Dropbox, Google Drive, Google Docs, and OneDrive.
+These links look safe and usually pass email security filters, which makes people trust them.
+
+A common trick works like this:
+- The attacker sends a shared file link.
+- The file looks important or attractive (for example, salary raise, HR document, or laptop upgrade).
+- When the user clicks the link, they are taken to a fake document.
+- From there, the user is tricked into:
+ - Entering login credentials on a fake login page, or
+ - Downloading a malicious file.
+
+Because the service itself is legitimate, users often don’t suspect anything — which is exactly what attackers rely on.
+
+>Just because a link comes from a trusted platform does **not** mean the content behind it is safe. Always verify the sender and the purpose of shared files.
+
+## Fake Login Pages
+
+Attackers mainly want usernames and passwords, and fake login pages are one of their easiest ways to steal them.
+
+They create pages that look exactly like real login screens people use every day—such as:
+- Microsoft Office 365
+- Google accounts
+- Email portals
+- Company internal login pages
+
+When a user enters their credentials on these fake pages, the details are **sent directly to the attacker** instead of logging the user in.
+
+Because the pages look familiar and trustworthy, many users don’t realize anything is wrong until it’s too late.
+
+Fake login pages are effective because:
+- They copy real designs and logos
+- Users are already used to logging in daily
+- One mistake can give attackers full account access
+
+## Side Channel Communications
+
+Side-channel communication happens when attackers move the conversation **outside email** to avoid company security controls.
+
+Common side channels include:
+- SMS
+- WhatsApp / Telegram
+- Phone calls
+- Video calls
+- Shared document platforms
+- Texted links
+
+By switching platforms, attackers:
+- Reduce monitoring by security teams
+- Increase trust and urgency
+- Continue social engineering without restrictions
+
+This technique is often used after the first phishing message succeeds.
+
+Attackers don’t rely on just one trick.  
+They combine:
+- Trusted platforms
+- Fake login pages
+- Malicious attachments
+- Human psychology
+
+Understanding these techniques helps users and defenders **spot attacks early and stop them before damage occurs**.
