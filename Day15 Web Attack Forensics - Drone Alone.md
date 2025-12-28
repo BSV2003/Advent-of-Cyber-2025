@@ -19,6 +19,10 @@ In this lab, we'll be using Splunk to pivot between web (Apache) logs and host-l
 
 # Environment Setup
 - Platform: Splunk
+- Log Sources:
+  - `windows_apache_access`
+  - `windows_apache_error`
+  - `windows_sysmon`
 
 Make sure the **time range** is set to **All time** or **Last 7 days**, otherwise logs may not appear.
 
