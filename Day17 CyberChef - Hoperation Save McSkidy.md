@@ -87,4 +87,110 @@ Not all useful data is visible on a webpage. Browsers allow us to inspect:
 
 # 🏰 Lock 1 – Outer Gate (Walkthrough)
 
+## Step-by-Step Breakdown
 
+1️⃣ **Identify the Guard Name**
+- Found in the login form
+- Encode the name using **Base64**
+- Use this as the **username**
+
+2️⃣ **Find the Magic Question**
+- Inspect **Network → Headers**
+- **Example:** What is the password for this level?
+- Encode the question using **Base64**
+
+3️⃣ **Use Chat (Bunnygram)**
+- Chat messages are Base64 encoded
+- Send the encoded question
+- Guard responds with an encoded password
+
+4️⃣ **Inspect Login Logic**
+- Go to **Debugger**
+- Discover password logic → Base64 encoded
+
+5️⃣ **Decode the Password**
+- Decode guard’s response in CyberChef
+- This gives the **plaintext password**
+
+6️⃣ **Login**
+- Username → Base64 encoded guard name
+- Password → Decoded plaintext password
+
+✅ **First lock successfully bypassed**
+
+## 🧠 Key Takeaways
+- Encoding ≠ security
+- Client-side logic can reveal authentication weaknesses
+- Base64 is commonly abused to “hide” secrets
+- Developer tools are critical for web security analysis
+- CyberChef simplifies complex transformations
+
+---
+
+# 🧱 Lock 2 – Outer Wall
+
+### Steps:
+1. Reuse encoded guard name as username
+2. **Extract new magic question:** Did you change the password?
+3. Encode question → send via chat
+4. Inspect login logic:
+- Password is **double Base64 encoded**
+5. Decode the response **twice**
+6. Login successfully
+
+✅ **Encoding used:** Base64 × 2
+
+## 🔍 Tools Used
+- **CyberChef (online/offline)**
+- **Browser Developer Tools**
+- Elements
+- Network tab
+- Debugger tab
+
+## 🧠 Key Takeaways
+- Encoding is not encryption
+- Multiple encoding layers increase complexity but not security
+- CyberChef simplifies complex transformations
+- Client-side logic can reveal authentication flaws
+- Inspecting headers and JavaScript is critical in web challenges
+
+---
+
+# 🔐 Lock 3 – Guard House
+
+## New Concept: XOR
+
+From this lock onward:
+- No magic question
+- Ask guard directly (e.g., *“Password please”*)
+- Guard responses may be slow (2–3 minutes)
+
+### XOR Basics
+- XOR uses a **key**
+- XOR is **reversible**
+- Applying XOR twice with the same key restores original data
+
+### Given
+- XOR Key: `cyberchef`
+
+### Login Logic
+1. Password is:
+   - XOR’ed with key
+   - Then encoded to Base64
+
+### Reverse Recipe (CyberChef)
+1. **From Base64**
+2. **XOR** with key `cyberchef`
+
+### Result
+- Plaintext password → Login successful
+
+## 🧠 Key Takeaways
+
+- CyberChef supports **chained operations**
+- Always reverse transformations **in reverse order**
+- XOR is symmetric (same operation encrypts & decrypts)
+- Developer tools are essential for:
+  - Logic discovery
+  - Hidden hints
+  - Authentication flow analysis
