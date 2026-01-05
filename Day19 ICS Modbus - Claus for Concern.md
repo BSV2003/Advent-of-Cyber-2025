@@ -153,5 +153,59 @@ In **early 2024**, malware called **FrostyGoop** was discovered:
 
 ## What is a PLC?
 
+A PLC (Programmable Logic Controller) is a special-purpose industrial computer used to control machines and physical processes. Unlike regular computers, PLCs are built to work reliably in harsh industrial environments.
 
+### Key Characteristics of PLCs
+ 
+ - **Built for harsh environments**
+Operate reliably in extreme temperatures, dust, vibration, moisture, and electrical noise.
+
+- **Runs continuously**
+Designed to run 24/7 for years without rebooting or crashing.
+
+- **Real-time control**
+Responds to sensor inputs within milliseconds to ensure safety and efficiency.
+
+- **Direct hardware control**
+Connects directly to sensors (temperature, pressure, weight) and actuators (motors, valves, robotic arms).
+
+In TBFC’s warehouse, PLCs control conveyor belts, robotic arms, and drone-loading mechanisms.
+
+## What is Modbus?
+
+Modbus is a communication protocol that allows industrial devices to talk to each other. It was created in 1979 and is still widely used today because of its simplicity and reliability.
+
+### How Modbus Works
+
+Modbus follows a request–response model:
+Client: _"What is the value of register 0?"_
+PLC: _"Register 0 = 1"_
+
+### Why Modbus Is Insecure
+
+Modbus was designed for trusted environments and does not include security features:
+- No authentication
+- No encryption
+- No authorization
+- No integrity verification
+
+Anyone who can reach the Modbus port can read or modify values.
+
+## Modbus Data Types
+
+Modbus organizes data into four main types:
+| Type              | Purpose                  | Values  | Example Uses                     |
+| ----------------- | ------------------------ | ------- | -------------------------------- |
+| Coils             | Digital outputs          | 0 or 1  | Motor ON/OFF, alarm status       |
+| Discrete Inputs   | Digital inputs           | 0 or 1  | Button pressed, sensor triggered |
+| Holding Registers | Writable numeric values  | 0–65535 | Speed, temperature, zone number  |
+| Input Registers   | Read-only numeric values | 0–65535 | Sensor readings                  |
+
+⚠️ **Important:**
+**Coils & Holding Registers** → writable
+**Discrete Inputs & Input Registers** → read-only
+
+## TBFC Drone Control System – Key Modbus Values
+
+**Holding Registers**
 
