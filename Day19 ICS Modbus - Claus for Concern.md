@@ -311,7 +311,7 @@ Order matters — incorrect steps trigger system failure.
 
 ---
 
-# Key Takeaways
+## Key Takeaways
 
 - ICS protocols assume trusted environments
 - Modbus is highly insecure if exposed
