@@ -208,4 +208,113 @@ Modbus organizes data into four main types:
 ## TBFC Drone Control System – Key Modbus Values
 
 **Holding Registers**
+- **HR0** – Package Type
+-- `0` = Christmas Gifts
+-- `1` = Chocolate Eggs
+-- `2` = Easter Baskets
+- **HR1** – Delivery Zone
+-- `1–9` = Normal zones
+-- `10` = Ocean dump zone
+- **HR4** – System Signature
+-- Used to identify system version or attacker signature
 
+**Coils**
+- **C10** – Inventory Verification
+- **C11** – Protection / Override
+- **C12** – Emergency Dump
+- **C13** – Audit Logging
+- **C14** – Christmas Restored Flag
+- **C15** – Self-Destruct Status
+
+## Modbus Addressing
+
+- Modbus addresses start at **0**, not 1.
+- Example:
+-- Register 0 → first register
+-- Coil 10 → 11th coil
+
+### Example Addresses
+
+- HR0 → Package Type
+- HR1 → Delivery Zone
+- HR4 → System Signature
+- C10 → Inventory Verification
+- C11 → Protection Flag
+- C15 → Self-Destruct Flag
+
+## Modbus TCP vs Serial Modbus
+
+**TCP:** Transmission Control Protocol (TCP) is a connection-oriented protocol requiring a TCP three-way-handshake to establish a connection. TCP provides reliable data transfer, flow control and congestion control. Higher-level protocols such as HTTP, POP3, IMAP and SMTP use TCP.
+
+**Serial Modbus (Legacy)**
+- Uses RS-232 / RS-485 cables
+- Requires physical access
+- Naturally isolated
+
+**Modbus TCP (Modern)**
+- Runs over TCP/IP
+- Listens on **port 502**
+- Accessible over networks
+- Vulnerable to remote attacks
+
+### The Security Problem
+
+Modbus TCP exposes industrial systems because it has:
+- No identity verification
+- No encryption (plaintext traffic)
+- No permission controls
+- No protection against command tampering
+
+Security must be added externally using:
+- Firewalls
+- VPNs
+- Network segmentation
+- Modbus security gateways
+
+## Connecting the Dots
+
+King Malhare bypassed the web interface entirely and:
+- Connected directly to **Modbus TCP (port 502)**
+- Read and modified registers and coils
+- Disabled logging and verification
+- Set traps to prevent remediation
+
+The crumpled maintenance note documented these exact Modbus addresses and warned about the trap logic.
+
+---
+
+# Practical
+
+**Investigation Steps**
+1. **Service discovery** using Nmap
+2. **Visual confirmation** via CCTV feed
+3. **Direct Modbus** access using PyModbus
+4. Read registers and coils
+5. Identify trap mechanism
+
+## Safe Remediation Order
+
+1. Disable protection mechanism (C11 = False)
+2. Restore package type (HR0 = 0)
+3. Enable inventory verification (C10 = True)
+4. Enable audit logging (C13 = True)
+5. Verify self-destruct never armed (C15 = False)
+
+Order matters — incorrect steps trigger system failure.
+
+### Tools Used
+
+- `nmap`
+- `python3`
+- `pymodbus`
+- Browser (CCTV monitoring)
+
+---
+
+# Key Takeaways
+
+- ICS protocols assume trusted environments
+- Modbus is highly insecure if exposed
+- Small logic changes can cause large physical impact
+- Understanding system behavior is critical before remediation
+- Order of operations matters in industrial systems
