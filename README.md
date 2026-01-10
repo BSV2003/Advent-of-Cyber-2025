@@ -66,17 +66,20 @@ The goal of this repository is to:
 ## 🛠 Tools & Technologies Used
 
 - Linux / Bash
-- TryHackMe AttackBox
 - Splunk
+- AI
 - Burp Suite
-- Nmap, Netcat
+- Nmap
+- Netcat
 - CyberChef
 - YARA
-- Zeek & RITA
+- Zeek
+- RITA
 - AWS CLI
-- Docker
-- PowerShell & Python
-- Firefox Developer Tools
+- PEStudio
+- Microsoft Sentinel
+- cURL
+- Wireshark
 
 ---
 
